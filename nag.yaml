@@ -1,0 +1,34 @@
+---
+- name: Install and Configure Nagios For Openstack
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+     - name: Install nagios
+       yum:
+         name: "{{ packages }}"
+       vars:
+         packages:
+         - nagios
+         - nagios-devel
+         - nagios-plugins*
+         - gd
+         - gd-devel
+         - php
+         - gcc
+         - glibc
+         - glibc-common
+         - openssl
+         - nrpe
+
+   
+    - name: Kick it on automagically
+      shell: |
+        chkconfig --add nagios
+        chkconfig nagios on
+        systemctl restart httpd
+        systemctl restart nagios
+
+    - name: Add you some Nova list
+      shell: nova_list.sh
